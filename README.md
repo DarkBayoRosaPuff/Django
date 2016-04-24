@@ -3,7 +3,7 @@
 --(Para correr el proyecto)  
 python manage.py runserver  
 
---(Para que funcione la base de datos)
+--(Para que funcione la base de datos)  
         'NAME': 'prac3',  
         'USER': 'postgres',  
         'PASSWORD': 'papermario',  
