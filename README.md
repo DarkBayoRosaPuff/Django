@@ -10,4 +10,4 @@ python manage.py runserver
         'HOST': 'localhost',  
         'PORT': '5432',  
         
-(O cambienlo de acuerdo a como tengan postgres en su compu)
+(O cambiarlo de acuerdo a como se encuentre postgres en el equipo)
