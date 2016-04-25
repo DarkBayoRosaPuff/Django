@@ -1,0 +1,94 @@
+<!--
+	Phase Shift by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+{% load static %}
+	<head>
+		<title>Generos</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+		<script src="{% static 'js/jquery.min.js' %}"></script>
+		<script src="{% static 'js/jquery.dropotron.min.js' %}"></script>
+		<script src="{% static 'js/skel.min.js' %}"></script>
+		<script src="{% static 'js/skel-layers.min.js' %}"></script>
+		<script src="{% static 'js/init.js' %}"></script>
+			<link rel="stylesheet" href="{% static 'css/skel.css' %}" />
+			<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+			<link rel="stylesheet" href="{% static 'css/style-wide.css' %}" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+	</head>
+	<body>
+
+		<!-- Wrapper -->
+			<div class="wrapper style1">
+				<!-- Banner -->
+					<div id="banner" class="container">
+						<section>
+							{% if contenido %}
+							<table> 
+								<tr> 
+									<th>ID</th> 
+									<th>Nombre del genero musical</th> 
+								</tr>
+								{% for q in contenido %} 
+								<tr> 
+									<td>{{q.id}}</td> 
+									<td>{{q.nombre}}</td> 
+								</tr> 
+								{% endfor %} 
+							</table> 
+							{% else %} 
+								<p>La base de datos esta vacia</p> 
+							{% endif %}	
+						</section>
+					</div>
+			</div>
+
+	<!-- Footer -->
+		<div id="footer" class="wrapper style2">
+			<div class="container">
+				<section>
+					<header class="major">
+						<h2>Agrega un nuevo genero a la base de datos!</h2>
+						<span class="byline">Se un administrador responsable, y no dupliques los generos por el bien de todos</span>
+					</header>
+					<form action="{% url 'VerTabla:agregarGenero' %}" method="post" >
+					{% csrf_token %}
+						<div class="row half">
+							<div class="12u">
+								<input class="text" type="text" name="nombre" id="nombre" placeholder="Nombre del genero"/>
+							</div>
+						</div>
+
+						<div class="row half">
+							<div class="12u">
+								<ul class="actions">
+									<li>
+										<input type="submit" value="Agregar Genero" class="button alt" />
+									</li>
+								</ul>
+							</div>
+						</div>
+					</form>
+
+				</section>
+			</div>
+		</div>
+
+	<hr/>
+	<a class="button" href="{% url 'Login:nuevo' %}">Regreso a pagina principal</a>
+
+	<!-- Copyright -->
+		<div id="copyright">
+			<div class="container">
+				<div class="copyright">
+					<p>Design: <a href="http://templated.co">TEMPLATED</a> Images: <a href="http://unsplash.com">Unsplash</a> (<a href="http://unsplash.com/cc0">CC0</a>)</p>
+				</div>
+			</div>
+		</div>
+
+	</body>

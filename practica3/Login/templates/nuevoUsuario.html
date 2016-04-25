@@ -1,0 +1,234 @@
+<!--
+	Phase Shift by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+{% load static %}
+	<head>
+		<title>Index</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+		<script src="{% static 'js/jquery.min.js' %}"></script>
+		<script src="{% static 'js/jquery.dropotron.min.js' %}"></script>
+		<script src="{% static 'js/skel.min.js' %}"></script>
+		<script src="{% static 'js/skel-layers.min.js' %}"></script>
+		<script src="{% static 'js/init.js' %}"></script>
+			<link rel="stylesheet" href="{% static 'css/skel.css' %}" />
+			<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+			<link rel="stylesheet" href="{% static 'css/style-wide.css' %}" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+	</head>
+
+	<body>
+		<!-- Wrapper -->
+			<div class="wrapper style1">
+
+				<!-- Banner -->
+					<div id="banner" class="container">
+						{% if usuarioActual %}
+							<h2> Bienvenido! {{usuarioActual.username}} </h2>
+							<h2> Te registraste: {{usuarioActual.date_joined}} </h2>
+							<h2> La ultima vez que has iniciado sesion: {{usuarioActual.last_login}} (Duh)</h2>
+							<h2> Eres administrador?: {{usuarioActual.is_staff}} </h2>
+							<hr/>
+							<a class="button" href="{% url 'Login:logout' %}">Cerrar sesion</a>
+						{% else %}
+							<section>
+								<hr/>
+								{% block encabezado %}
+								<h2> -Inicia sesion- </h2>
+								{% endblock%}
+
+								<form action="{% url 'Login:iniciarSesion' %}" method="post" >
+								{% csrf_token %}
+								<div class="row half">
+								<div class="12u">
+								<input class="text" type="text" name="username" id="username" placeholder="Username"/>
+								</div>
+								</div>
+
+								<div class="row half">
+									<div class="12u">
+										<input class="text" type="text" name="password" id="password" placeholder="Contraseña"/>
+									</div>
+								</div>
+
+								<div class="row half">
+									<div class="12u">
+										<ul class="actions">
+										<li>
+											<input type="submit" value="Iniciar Sesion" class="button" />
+										</li>
+										</ul>
+									</div>
+								</div>
+								</form>
+
+							</section>
+
+						<section>
+							<hr/>
+							{% block encabezado2 %}
+							<h2> -Registro de nuevo usuario- </h2>
+							{% endblock%}
+
+							{% block contenido %}
+							<form id='formulario' method='post' action="{% url 'Login:nuevo_usuario' %}">
+							{% csrf_token %}
+							<table>{{formulario}}</table>
+							<p><input type='submit' value='Registrar'/></p>
+							</form>
+							{% endblock %}
+						</section>
+						{% endif %}
+					</div>
+
+					<div id="extra" class="container">
+						{% if usuarioActual %}
+						<h2> Opciones disponibles para ti: </h2>
+						<hr/>
+
+						<div id="extra" class = "container">
+							<a class= "button" href="{% url 'VerTabla:consultarEntidades' %}">Agregar Entidad Musical</a>
+						</div>
+						<hr/>
+
+						{% if usuarioActual.is_staff %}
+						<div id="extra" class = "container">
+							<a class= "button" href="{% url 'VerTabla:consultarGeneros' %}">Agregar Genero</a>
+						</div>
+						<hr/>
+						{% endif %}
+
+						{% else %}
+						<h2> No has iniciado sesion :c </h2>
+						<h2> -Asi que no tienes mas opciones disponibles </h2>
+						<hr/>
+						{% endif %}
+						<hr/>
+					</div>
+				
+
+				<!-- Extra -->
+					<div id="extra">
+						<div class="container">
+							<h2> Catalogo de entidades musicales existentes: </h2>
+							<hr/>
+							<div class="row no-collapse-1">
+								{% for q in catalogo %}
+								<section class="4u"> <a href="#" class="image featured"><img src="/static/images/{{q.nombre}}.jpg" width="400" height="400" alt="ups"></a>
+									<div class="box">
+										<!-- <a href="#" class="button">Cambiar imagen!</a> -->
+										<hr/>
+
+										<h2> {{q.nombre}} </h2>
+										<hr/>
+										<h1> Género</h1>
+										<h2> {{q.genero}} </h2>
+										<hr/>
+										<h1> Fecha de fundacion:</h1>
+										<h2> {{q.fechaInicio}} </h2>
+										<hr/>
+
+										<h1> ALbumes:</h1>
+										{% for a in q.album_set.all %}
+										<h2> {{ a.nombre }}</h2>
+										{% endfor %}										
+										<hr/>
+
+										<form action="{% url 'Login:agregarAlbum' %}" method="post" >
+										{% csrf_token %}
+										<div class="row half">
+											<div class="12u">
+												<input class="text" type="text" name="nombre" id="nombre" placeholder="Nombre del album"/>
+											</div>
+										</div>
+										<input class="text" type="hidden" name="grupo" id="grupo" value ="{{ q.nombre }}"/>
+										<div class="row half">
+											<div class="12u">
+												<ul class="actions">
+													<li>
+														<input type="submit" value="Agregar Album" class="button alt" />
+													</li>
+												</ul>
+											</div>
+										</div>
+										</form>
+
+										<form action="{% url 'Login:agregarPublicacion' %}" method="post" >
+										{% csrf_token %}
+										<div class="row half">
+											<div class="12u">
+												<input class="text" type="text" name="titulo" id="titulo" placeholder="Titulo de la publicacion"/>
+											</div>
+										</div>
+
+										<div class="row half">
+											<div class="12u">
+												<textarea name="cuerpo" id="cuerpo" placeholder="Descripcion"></textarea>
+											</div>
+										</div>
+
+										<input class="text" type="hidden" name="grupo" id="grupo" value ="{{ q.nombre }}"/>
+
+										<div class="row half">
+											<div class="12u">
+												<ul class="actions">
+													<li>
+														<input type="submit" value="Agregar Publicacion" class="button alt" />
+													</li>
+												</ul>
+											</div>
+										</div>
+										</form>
+
+									</div>
+								</section>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+
+					<!-- Main -->
+					<div id="main">
+						<div class="container">
+						<hr/>
+						<h2> Publicaciones mas recientes! </h2>
+							<div class="row"> 
+								<!-- Content -->
+								<div class="10u">
+									<section>
+										{% for p in publicaciones %}
+										<ul class="style">
+											<li class="fa fa-leaf">
+												<h3>{{ p.titulo }}</h3>
+												<span> -Fecha: {{ p.fechaInicio }}</span>
+												<hr/>
+												<h2>{{ p.cuerpo }}</h2>
+												<hr/>
+												<span> Publicado en la entidad musical: {{ p.entidadID.nombre }}</span>
+												<hr/>
+											</li>
+										</ul>
+										{% endfor %}
+									</section>
+								</div>
+							</div>
+						</div>
+					</div>
+
+	</div>
+
+	<!-- Copyright -->
+		<div id="copyright">
+			<div class="container">
+				<div class="copyright">
+					<p>Design: <a href="http://templated.co">TEMPLATED</a> Images: <a href="http://unsplash.com">Unsplash</a> (<a href="http://unsplash.com/cc0">CC0</a>)</p>
+				</div>
+			</div>
+		</div>
+
+	</body>
